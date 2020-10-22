@@ -1,5 +1,5 @@
 /*!
- * Vue-Lazyload.js v1.3.10
+ * Vue-Lazyload.js v1.3.11
  * (c) 2020 Awe <hilongjw@gmail.com>
  * Released under the MIT License.
  */
@@ -847,19 +847,22 @@ var ReactiveListener = function () {
 
       var onFinish = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : noop;
 
+      console.log('load function');
       if (this.attempt > this.options.attempt - 1 && this.state.error) {
         if (!this.options.silent) console.log('VueLazyload log: ' + this.src + ' tried too more than ' + this.options.attempt + ' times');
         onFinish();
         return;
       }
+      console.log('断点1', this.attempt, this.options.attempt, this.state.error);
       if (this.state.rendered && this.state.loaded) return;
+      console.log('断点2', this.state.rendered, this.state.loaded);
       if (this._imageCache.has(this.src)) {
         this.state.loaded = true;
         this.render('loaded', true);
         this.state.rendered = true;
         return onFinish();
       }
-
+      console.log('断点3', this._imageCache, this.src);
       this.renderLoading(function () {
         _this5.attempt++;
 
@@ -881,6 +884,7 @@ var ReactiveListener = function () {
           console.log(_this5._imageCache, 'imageCache');
           onFinish();
         }, function (err) {
+          console.log('error');
           !_this5.options.silent && console.error(err);
           _this5.state.error = true;
           _this5.state.loaded = false;
@@ -974,7 +978,7 @@ var Lazy = function (Vue) {
           observerOptions = _ref.observerOptions;
       classCallCheck(this, Lazy);
 
-      this.version = '1.3.10';
+      this.version = '1.3.11';
       this.mode = modeType.event;
       this.ListenerQueue = [];
       this.TargetIndex = 0;
@@ -1366,6 +1370,7 @@ var Lazy = function (Vue) {
             freeList.push(listener);
           }
           var catIn = listener.checkInView();
+          console.log(catIn, '调试1');
           if (!catIn) return;
           listener.load();
         });
