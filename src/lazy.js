@@ -346,8 +346,9 @@ export default function (Vue) {
           freeList.push(listener)
         }
         const catIn = listener.checkInView()
-        console.log(listener, catIn, '调试110')
-        if (!catIn) return
+        const isInView = listener.isInView
+        console.log(listener, catIn, isInView, '调试119')
+        if (!isInView) return
         listener.load()
       })
       freeList.forEach(item => {

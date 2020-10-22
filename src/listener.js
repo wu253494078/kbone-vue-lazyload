@@ -27,6 +27,7 @@ export default class ReactiveListener {
     this.options = options
 
     this.rect = null
+    this.isInView = false
 
     this.$parent = $parent
     this.elRenderer = elRenderer
@@ -105,10 +106,9 @@ export default class ReactiveListener {
   checkInView () {
     this.el.$$getBoundingClientRect().then(res => {
       this.rect = res
-      console.log((this.rect.top < window.innerHeight * this.options.preLoad && this.rect.bottom > this.options.preLoadTop) &&
-      (this.rect.left < window.innerWidth * this.options.preLoad && this.rect.right > 0), 'check3')
-      return (this.rect.top < window.innerHeight * this.options.preLoad && this.rect.bottom > this.options.preLoadTop) &&
+      this.isInView = (this.rect.top < window.innerHeight * this.options.preLoad && this.rect.bottom > this.options.preLoadTop) &&
             (this.rect.left < window.innerWidth * this.options.preLoad && this.rect.right > 0)
+      console.log(this.isInView, 'check33')
     })
   }
 
