@@ -340,14 +340,12 @@ export default function (Vue) {
      */
     _lazyLoadHandler () {
       const freeList = []
-      console.log(this.ListenerQueue, 'ListenerQueue')
       this.ListenerQueue.forEach((listener, index) => {
         if (!listener.el || !listener.el.parentNode) {
           freeList.push(listener)
         }
         const catIn = listener.checkInView()
         const isInView = listener.isInView
-        console.log(listener, catIn, isInView, '调试119')
         if (!isInView) return
         listener.load()
       })
@@ -419,7 +417,6 @@ export default function (Vue) {
       }
 
       el.setAttribute('lazy', state)
-      console.log(el, 'eeeeelllll')
       this.$emit(state, listener, cache)
       this.options.adapter[state] && this.options.adapter[state](listener, this.options)
 

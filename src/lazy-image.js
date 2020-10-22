@@ -78,7 +78,6 @@ export default (lazyManager) => {
           this.isInView = inBrowser &&
                     (this.rect.top < window.innerHeight * lazyManager.options.preLoad && this.rect.bottom > 0) &&
                     (this.rect.left < window.innerWidth * lazyManager.options.preLoad && this.rect.right > 0)
-          console.log(this.isInView, 'check11')
         })
       },
       load (onFinish = noop) {

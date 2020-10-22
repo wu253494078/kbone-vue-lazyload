@@ -53,7 +53,6 @@ export default class ReactiveListener {
     } else {
       this.el.setAttribute('data-src', this.src)
     }
-    console.log(this.src, 'srccccc')
     this.state = {
       loading: false,
       error: false,
@@ -108,7 +107,6 @@ export default class ReactiveListener {
       this.rect = res
       this.isInView = (this.rect.top < window.innerHeight * this.options.preLoad && this.rect.bottom > this.options.preLoadTop) &&
             (this.rect.left < window.innerWidth * this.options.preLoad && this.rect.right > 0)
-      console.log(this.isInView, 'check33')
     })
   }
 
@@ -148,28 +146,23 @@ export default class ReactiveListener {
    * @return
    */
   load (onFinish = noop) {
-    console.log('load function')
     if ((this.attempt > this.options.attempt - 1) && this.state.error) {
       if (!this.options.silent) console.log(`VueLazyload log: ${this.src} tried too more than ${this.options.attempt} times`)
       onFinish()
       return
     }
-    console.log('断点1', this.attempt, this.options.attempt, this.state.error)
     if (this.state.rendered && this.state.loaded) return
-    console.log('断点2', this.state.rendered, this.state.loaded)
     if (this._imageCache.has(this.src)) {
       this.state.loaded = true
       this.render('loaded', true)
       this.state.rendered = true
       return onFinish()
     }
-    console.log('断点3', this._imageCache, this.src)
     this.renderLoading(() => {
       this.attempt++
 
       this.options.adapter['beforeLoad'] && this.options.adapter['beforeLoad'](this, this.options)
       this.record('loadStart')
-      console.log(this.src, 'src222')
       loadImageAsync({
         src: this.src,
         cors: this.cors
@@ -182,10 +175,8 @@ export default class ReactiveListener {
         this.render('loaded', false)
         this.state.rendered = true
         this._imageCache.add(this.src)
-        console.log(this._imageCache, 'imageCache')
         onFinish()
       }, err => {
-        console.log('error')
         !this.options.silent && console.error(err)
         this.state.error = true
         this.state.loaded = false
