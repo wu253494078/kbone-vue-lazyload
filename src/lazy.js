@@ -416,7 +416,7 @@ export default function (Vue) {
       }
 
       el.setAttribute('lazy', state)
-
+      console.log(el, 'eeeeelllll')
       this.$emit(state, listener, cache)
       this.options.adapter[state] && this.options.adapter[state](listener, this.options)
 

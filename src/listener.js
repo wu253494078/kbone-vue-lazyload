@@ -52,7 +52,7 @@ export default class ReactiveListener {
     } else {
       this.el.setAttribute('data-src', this.src)
     }
-
+    console.log(this.src, 'srccccc')
     this.state = {
       loading: false,
       error: false,
@@ -105,7 +105,6 @@ export default class ReactiveListener {
   checkInView () {
     this.el.$$getBoundingClientRect().then(res => {
       this.rect = res
-      console.log(this.rect, window.innerHeight, this.options.preLoad, this.options.preLoadTop, window.innerWidth, '调试')
       return (this.rect.top < window.innerHeight * this.options.preLoad && this.rect.bottom > this.options.preLoadTop) &&
             (this.rect.left < window.innerWidth * this.options.preLoad && this.rect.right > 0)
     })
@@ -165,7 +164,7 @@ export default class ReactiveListener {
 
       this.options.adapter['beforeLoad'] && this.options.adapter['beforeLoad'](this, this.options)
       this.record('loadStart')
-
+      console.log(this.src, 'src222')
       loadImageAsync({
         src: this.src,
         cors: this.cors
@@ -178,6 +177,7 @@ export default class ReactiveListener {
         this.render('loaded', false)
         this.state.rendered = true
         this._imageCache.add(this.src)
+        console.log(this._imageCache, 'imageCache')
         onFinish()
       }, err => {
         !this.options.silent && console.error(err)

@@ -1,5 +1,5 @@
 /*!
- * Vue-Lazyload.js v1.3.9
+ * Vue-Lazyload.js v1.3.10
  * (c) 2020 Awe <hilongjw@gmail.com>
  * Released under the MIT License.
  */
@@ -717,7 +717,7 @@ var ReactiveListener = function () {
       } else {
         this.el.setAttribute('data-src', this.src);
       }
-
+      console.log(this.src, 'srccccc');
       this.state = {
         loading: false,
         error: false,
@@ -790,7 +790,6 @@ var ReactiveListener = function () {
 
       this.el.$$getBoundingClientRect().then(function (res) {
         _this2.rect = res;
-        console.log(_this2.rect, window.innerHeight, _this2.options.preLoad, _this2.options.preLoadTop, window.innerWidth, '调试');
         return _this2.rect.top < window.innerHeight * _this2.options.preLoad && _this2.rect.bottom > _this2.options.preLoadTop && _this2.rect.left < window.innerWidth * _this2.options.preLoad && _this2.rect.right > 0;
       });
     }
@@ -866,7 +865,7 @@ var ReactiveListener = function () {
 
         _this5.options.adapter['beforeLoad'] && _this5.options.adapter['beforeLoad'](_this5, _this5.options);
         _this5.record('loadStart');
-
+        console.log(_this5.src, 'src222');
         loadImageAsync({
           src: _this5.src,
           cors: _this5.cors
@@ -879,6 +878,7 @@ var ReactiveListener = function () {
           _this5.render('loaded', false);
           _this5.state.rendered = true;
           _this5._imageCache.add(_this5.src);
+          console.log(_this5._imageCache, 'imageCache');
           onFinish();
         }, function (err) {
           !_this5.options.silent && console.error(err);
@@ -974,7 +974,7 @@ var Lazy = function (Vue) {
           observerOptions = _ref.observerOptions;
       classCallCheck(this, Lazy);
 
-      this.version = '1.3.9';
+      this.version = '1.3.10';
       this.mode = modeType.event;
       this.ListenerQueue = [];
       this.TargetIndex = 0;
@@ -1452,7 +1452,7 @@ var Lazy = function (Vue) {
         }
 
         el.setAttribute('lazy', state);
-
+        console.log(el, 'eeeeelllll');
         this.$emit(state, listener, cache);
         this.options.adapter[state] && this.options.adapter[state](listener, this.options);
 
@@ -1538,7 +1538,6 @@ var LazyComponent = (function (lazy) {
 
         this.$el.$$getBoundingClientRect().then(function (res) {
           _this2.rect = res;
-          console.log(inBrowser, _this2.rect, window.innerHeight, lazy.options.preLoad, window.innerWidth, '调试b');
           return inBrowser && _this2.rect.top < window.innerHeight * lazy.options.preLoad && _this2.rect.bottom > 0 && _this2.rect.left < window.innerWidth * lazy.options.preLoad && _this2.rect.right > 0;
         });
       },
@@ -1740,7 +1739,6 @@ var LazyImage = (function (lazyManager) {
 
         this.$el.$$getBoundingClientRect().then(function (res) {
           _this2.rect = res;
-          console.log(_this2.rect, window.innerHeight, lazyManager.options.preLoad, window.innerWidth, '调试a');
           return inBrowser && _this2.rect.top < window.innerHeight * lazyManager.options.preLoad && _this2.rect.bottom > 0 && _this2.rect.left < window.innerWidth * lazyManager.options.preLoad && _this2.rect.right > 0;
         });
       },
