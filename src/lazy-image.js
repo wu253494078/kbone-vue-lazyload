@@ -67,7 +67,9 @@ export default (lazyManager) => {
         this.renderSrc = this.options.loading
       },
       getRect () {
-        this.rect = this.$el.getBoundingClientRect()
+        this.$el.$$getBoundingClientRect().then(res => {
+          this.rect = res 
+        })
       },
       checkInView () {
         this.$el.$$getBoundingClientRect().then(res => {

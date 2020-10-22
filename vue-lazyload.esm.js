@@ -1,5 +1,5 @@
 /*!
- * Vue-Lazyload.js v1.3.7
+ * Vue-Lazyload.js v1.3.9
  * (c) 2020 Awe <hilongjw@gmail.com>
  * Released under the MIT License.
  */
@@ -771,7 +771,11 @@ var ReactiveListener = function () {
   }, {
     key: 'getRect',
     value: function getRect() {
-      this.rect = this.el.getBoundingClientRect();
+      var _this = this;
+
+      this.el.$$getBoundingClientRect().then(function (res) {
+        _this.rect = res;
+      });
     }
 
     /*
@@ -782,12 +786,12 @@ var ReactiveListener = function () {
   }, {
     key: 'checkInView',
     value: function checkInView() {
-      var _this = this;
+      var _this2 = this;
 
       this.el.$$getBoundingClientRect().then(function (res) {
-        _this.rect = res;
-        console.log(_this.rect, window.innerHeight, _this.options.preLoad, _this.options.preLoadTop, window.innerWidth, '调试');
-        return _this.rect.top < window.innerHeight * _this.options.preLoad && _this.rect.bottom > _this.options.preLoadTop && _this.rect.left < window.innerWidth * _this.options.preLoad && _this.rect.right > 0;
+        _this2.rect = res;
+        console.log(_this2.rect, window.innerHeight, _this2.options.preLoad, _this2.options.preLoadTop, window.innerWidth, '调试');
+        return _this2.rect.top < window.innerHeight * _this2.options.preLoad && _this2.rect.bottom > _this2.options.preLoadTop && _this2.rect.left < window.innerWidth * _this2.options.preLoad && _this2.rect.right > 0;
       });
     }
 
@@ -798,10 +802,10 @@ var ReactiveListener = function () {
   }, {
     key: 'filter',
     value: function filter() {
-      var _this2 = this;
+      var _this3 = this;
 
       ObjectKeys(this.options.filter).map(function (key) {
-        _this2.options.filter[key](_this2, _this2.options);
+        _this3.options.filter[key](_this3, _this3.options);
       });
     }
 
@@ -814,21 +818,21 @@ var ReactiveListener = function () {
   }, {
     key: 'renderLoading',
     value: function renderLoading(cb) {
-      var _this3 = this;
+      var _this4 = this;
 
       this.state.loading = true;
       loadImageAsync({
         src: this.loading,
         cors: this.cors
       }, function (data) {
-        _this3.render('loading', false);
-        _this3.state.loading = false;
+        _this4.render('loading', false);
+        _this4.state.loading = false;
         cb();
       }, function () {
         // handler `loading image` load failed
         cb();
-        _this3.state.loading = false;
-        if (!_this3.options.silent) console.warn('VueLazyload log: load failed with loading image(' + _this3.loading + ')');
+        _this4.state.loading = false;
+        if (!_this4.options.silent) console.warn('VueLazyload log: load failed with loading image(' + _this4.loading + ')');
       });
     }
 
@@ -840,7 +844,7 @@ var ReactiveListener = function () {
   }, {
     key: 'load',
     value: function load() {
-      var _this4 = this;
+      var _this5 = this;
 
       var onFinish = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : noop;
 
@@ -858,29 +862,29 @@ var ReactiveListener = function () {
       }
 
       this.renderLoading(function () {
-        _this4.attempt++;
+        _this5.attempt++;
 
-        _this4.options.adapter['beforeLoad'] && _this4.options.adapter['beforeLoad'](_this4, _this4.options);
-        _this4.record('loadStart');
+        _this5.options.adapter['beforeLoad'] && _this5.options.adapter['beforeLoad'](_this5, _this5.options);
+        _this5.record('loadStart');
 
         loadImageAsync({
-          src: _this4.src,
-          cors: _this4.cors
+          src: _this5.src,
+          cors: _this5.cors
         }, function (data) {
-          _this4.naturalHeight = data.naturalHeight;
-          _this4.naturalWidth = data.naturalWidth;
-          _this4.state.loaded = true;
-          _this4.state.error = false;
-          _this4.record('loadEnd');
-          _this4.render('loaded', false);
-          _this4.state.rendered = true;
-          _this4._imageCache.add(_this4.src);
+          _this5.naturalHeight = data.naturalHeight;
+          _this5.naturalWidth = data.naturalWidth;
+          _this5.state.loaded = true;
+          _this5.state.error = false;
+          _this5.record('loadEnd');
+          _this5.render('loaded', false);
+          _this5.state.rendered = true;
+          _this5._imageCache.add(_this5.src);
           onFinish();
         }, function (err) {
-          !_this4.options.silent && console.error(err);
-          _this4.state.error = true;
-          _this4.state.loaded = false;
-          _this4.render('error', false);
+          !_this5.options.silent && console.error(err);
+          _this5.state.error = true;
+          _this5.state.loaded = false;
+          _this5.render('error', false);
         });
       });
     }
@@ -970,7 +974,7 @@ var Lazy = function (Vue) {
           observerOptions = _ref.observerOptions;
       classCallCheck(this, Lazy);
 
-      this.version = '1.3.7';
+      this.version = '1.3.9';
       this.mode = modeType.event;
       this.ListenerQueue = [];
       this.TargetIndex = 0;
@@ -1523,15 +1527,19 @@ var LazyComponent = (function (lazy) {
 
     methods: {
       getRect: function getRect() {
-        this.rect = this.$el.getBoundingClientRect();
-      },
-      checkInView: function checkInView() {
         var _this = this;
 
         this.$el.$$getBoundingClientRect().then(function (res) {
           _this.rect = res;
-          console.log(inBrowser, _this.rect, window.innerHeight, lazy.options.preLoad, window.innerWidth, '调试b');
-          return inBrowser && _this.rect.top < window.innerHeight * lazy.options.preLoad && _this.rect.bottom > 0 && _this.rect.left < window.innerWidth * lazy.options.preLoad && _this.rect.right > 0;
+        });
+      },
+      checkInView: function checkInView() {
+        var _this2 = this;
+
+        this.$el.$$getBoundingClientRect().then(function (res) {
+          _this2.rect = res;
+          console.log(inBrowser, _this2.rect, window.innerHeight, lazy.options.preLoad, window.innerWidth, '调试b');
+          return inBrowser && _this2.rect.top < window.innerHeight * lazy.options.preLoad && _this2.rect.bottom > 0 && _this2.rect.left < window.innerWidth * lazy.options.preLoad && _this2.rect.right > 0;
         });
       },
       load: function load() {
@@ -1721,19 +1729,23 @@ var LazyImage = (function (lazyManager) {
         this.renderSrc = this.options.loading;
       },
       getRect: function getRect() {
-        this.rect = this.$el.getBoundingClientRect();
-      },
-      checkInView: function checkInView() {
         var _this = this;
 
         this.$el.$$getBoundingClientRect().then(function (res) {
           _this.rect = res;
-          console.log(_this.rect, window.innerHeight, lazyManager.options.preLoad, window.innerWidth, '调试a');
-          return inBrowser && _this.rect.top < window.innerHeight * lazyManager.options.preLoad && _this.rect.bottom > 0 && _this.rect.left < window.innerWidth * lazyManager.options.preLoad && _this.rect.right > 0;
+        });
+      },
+      checkInView: function checkInView() {
+        var _this2 = this;
+
+        this.$el.$$getBoundingClientRect().then(function (res) {
+          _this2.rect = res;
+          console.log(_this2.rect, window.innerHeight, lazyManager.options.preLoad, window.innerWidth, '调试a');
+          return inBrowser && _this2.rect.top < window.innerHeight * lazyManager.options.preLoad && _this2.rect.bottom > 0 && _this2.rect.left < window.innerWidth * lazyManager.options.preLoad && _this2.rect.right > 0;
         });
       },
       load: function load() {
-        var _this2 = this;
+        var _this3 = this;
 
         var onFinish = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : noop;
 
@@ -1746,12 +1758,12 @@ var LazyImage = (function (lazyManager) {
         loadImageAsync({ src: src }, function (_ref) {
           var src = _ref.src;
 
-          _this2.renderSrc = src;
-          _this2.state.loaded = true;
+          _this3.renderSrc = src;
+          _this3.state.loaded = true;
         }, function (e) {
-          _this2.state.attempt++;
-          _this2.renderSrc = _this2.options.error;
-          _this2.state.error = true;
+          _this3.state.attempt++;
+          _this3.renderSrc = _this3.options.error;
+          _this3.state.error = true;
         });
       }
     }

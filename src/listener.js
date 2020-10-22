@@ -93,7 +93,9 @@ export default class ReactiveListener {
    * @return
    */
   getRect () {
-    this.rect = this.el.getBoundingClientRect()
+    this.el.$$getBoundingClientRect().then(res => {
+      this.rect = res 
+    })
   }
 
   /*
