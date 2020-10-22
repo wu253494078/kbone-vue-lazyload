@@ -340,12 +340,13 @@ export default function (Vue) {
      */
     _lazyLoadHandler () {
       const freeList = []
+      console.log(this.ListenerQueue, 'ListenerQueue')
       this.ListenerQueue.forEach((listener, index) => {
         if (!listener.el || !listener.el.parentNode) {
           freeList.push(listener)
         }
         const catIn = listener.checkInView()
-        console.log(catIn, '调试111')
+        console.log(listener, catIn, '调试110')
         if (!catIn) return
         listener.load()
       })

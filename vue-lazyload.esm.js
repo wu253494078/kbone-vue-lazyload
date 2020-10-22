@@ -1,5 +1,5 @@
 /*!
- * Vue-Lazyload.js v1.3.12
+ * Vue-Lazyload.js v1.3.13
  * (c) 2020 Awe <hilongjw@gmail.com>
  * Released under the MIT License.
  */
@@ -979,7 +979,7 @@ var Lazy = function (Vue) {
           observerOptions = _ref.observerOptions;
       classCallCheck(this, Lazy);
 
-      this.version = '1.3.12';
+      this.version = '1.3.13';
       this.mode = modeType.event;
       this.ListenerQueue = [];
       this.TargetIndex = 0;
@@ -1366,12 +1366,13 @@ var Lazy = function (Vue) {
         var _this7 = this;
 
         var freeList = [];
+        console.log(this.ListenerQueue, 'ListenerQueue');
         this.ListenerQueue.forEach(function (listener, index) {
           if (!listener.el || !listener.el.parentNode) {
             freeList.push(listener);
           }
           var catIn = listener.checkInView();
-          console.log(catIn, '调试111');
+          console.log(listener, catIn, '调试110');
           if (!catIn) return;
           listener.load();
         });
