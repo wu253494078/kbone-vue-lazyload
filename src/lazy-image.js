@@ -70,10 +70,12 @@ export default (lazyManager) => {
         this.rect = this.$el.getBoundingClientRect()
       },
       checkInView () {
-        this.getRect()
-        return inBrowser &&
+        this.el.$$getBoundingClientRect().then(res => {
+          this.rect = res 
+          return inBrowser &&
                     (this.rect.top < window.innerHeight * lazyManager.options.preLoad && this.rect.bottom > 0) &&
                     (this.rect.left < window.innerWidth * lazyManager.options.preLoad && this.rect.right > 0)
+        })
       },
       load (onFinish = noop) {
         if ((this.state.attempt > this.options.attempt - 1) && this.state.error) {

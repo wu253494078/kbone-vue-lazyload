@@ -1,5 +1,5 @@
 /*!
- * Vue-Lazyload.js v1.3.3
+ * Vue-Lazyload.js v1.3.4
  * (c) 2020 Awe <hilongjw@gmail.com>
  * Released under the MIT License.
  */
@@ -452,16 +452,12 @@ function supportWebp() {
   if (!inBrowser) return false;
 
   var support = true;
-  var d = document;
-
   try {
-    var el = d.createElement('object');
-    el.type = 'image/webp';
-    el.style.visibility = 'hidden';
-    el.innerHTML = '!';
-    d.body.appendChild(el);
-    support = !el.offsetWidth;
-    d.body.removeChild(el);
+    var elem = document.createElement('canvas');
+
+    if (!!(elem.getContext && elem.getContext('2d'))) {
+      support = elem.toDataURL('image/webp').indexOf('data:image/webp') === 0;
+    }
   } catch (err) {
     support = false;
   }
@@ -781,8 +777,12 @@ var ReactiveListener = function () {
   }, {
     key: 'checkInView',
     value: function checkInView() {
-      this.getRect();
-      return this.rect.top < window.innerHeight * this.options.preLoad && this.rect.bottom > this.options.preLoadTop && this.rect.left < window.innerWidth * this.options.preLoad && this.rect.right > 0;
+      var _this = this;
+
+      this.el.$$getBoundingClientRect().then(function (res) {
+        _this.rect = res;
+        return _this.rect.top < window.innerHeight * _this.options.preLoad && _this.rect.bottom > _this.options.preLoadTop && _this.rect.left < window.innerWidth * _this.options.preLoad && _this.rect.right > 0;
+      });
     }
 
     /*
@@ -792,10 +792,10 @@ var ReactiveListener = function () {
   }, {
     key: 'filter',
     value: function filter() {
-      var _this = this;
+      var _this2 = this;
 
       ObjectKeys(this.options.filter).map(function (key) {
-        _this.options.filter[key](_this, _this.options);
+        _this2.options.filter[key](_this2, _this2.options);
       });
     }
 
@@ -808,21 +808,21 @@ var ReactiveListener = function () {
   }, {
     key: 'renderLoading',
     value: function renderLoading(cb) {
-      var _this2 = this;
+      var _this3 = this;
 
       this.state.loading = true;
       loadImageAsync({
         src: this.loading,
         cors: this.cors
       }, function (data) {
-        _this2.render('loading', false);
-        _this2.state.loading = false;
+        _this3.render('loading', false);
+        _this3.state.loading = false;
         cb();
       }, function () {
         // handler `loading image` load failed
         cb();
-        _this2.state.loading = false;
-        if (!_this2.options.silent) console.warn('VueLazyload log: load failed with loading image(' + _this2.loading + ')');
+        _this3.state.loading = false;
+        if (!_this3.options.silent) console.warn('VueLazyload log: load failed with loading image(' + _this3.loading + ')');
       });
     }
 
@@ -834,7 +834,7 @@ var ReactiveListener = function () {
   }, {
     key: 'load',
     value: function load() {
-      var _this3 = this;
+      var _this4 = this;
 
       var onFinish = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : noop;
 
@@ -852,29 +852,29 @@ var ReactiveListener = function () {
       }
 
       this.renderLoading(function () {
-        _this3.attempt++;
+        _this4.attempt++;
 
-        _this3.options.adapter['beforeLoad'] && _this3.options.adapter['beforeLoad'](_this3, _this3.options);
-        _this3.record('loadStart');
+        _this4.options.adapter['beforeLoad'] && _this4.options.adapter['beforeLoad'](_this4, _this4.options);
+        _this4.record('loadStart');
 
         loadImageAsync({
-          src: _this3.src,
-          cors: _this3.cors
+          src: _this4.src,
+          cors: _this4.cors
         }, function (data) {
-          _this3.naturalHeight = data.naturalHeight;
-          _this3.naturalWidth = data.naturalWidth;
-          _this3.state.loaded = true;
-          _this3.state.error = false;
-          _this3.record('loadEnd');
-          _this3.render('loaded', false);
-          _this3.state.rendered = true;
-          _this3._imageCache.add(_this3.src);
+          _this4.naturalHeight = data.naturalHeight;
+          _this4.naturalWidth = data.naturalWidth;
+          _this4.state.loaded = true;
+          _this4.state.error = false;
+          _this4.record('loadEnd');
+          _this4.render('loaded', false);
+          _this4.state.rendered = true;
+          _this4._imageCache.add(_this4.src);
           onFinish();
         }, function (err) {
-          !_this3.options.silent && console.error(err);
-          _this3.state.error = true;
-          _this3.state.loaded = false;
-          _this3.render('error', false);
+          !_this4.options.silent && console.error(err);
+          _this4.state.error = true;
+          _this4.state.loaded = false;
+          _this4.render('error', false);
         });
       });
     }
@@ -964,7 +964,7 @@ var Lazy = function (Vue) {
           observerOptions = _ref.observerOptions;
       classCallCheck(this, Lazy);
 
-      this.version = '1.3.3';
+      this.version = '1.3.4';
       this.mode = modeType.event;
       this.ListenerQueue = [];
       this.TargetIndex = 0;
@@ -1520,8 +1520,12 @@ var LazyComponent = (function (lazy) {
         this.rect = this.$el.getBoundingClientRect();
       },
       checkInView: function checkInView() {
-        this.getRect();
-        return inBrowser && this.rect.top < window.innerHeight * lazy.options.preLoad && this.rect.bottom > 0 && this.rect.left < window.innerWidth * lazy.options.preLoad && this.rect.right > 0;
+        var _this = this;
+
+        this.el.$$getBoundingClientRect().then(function (res) {
+          _this.rect = res;
+          return inBrowser && _this.rect.top < window.innerHeight * lazy.options.preLoad && _this.rect.bottom > 0 && _this.rect.left < window.innerWidth * lazy.options.preLoad && _this.rect.right > 0;
+        });
       },
       load: function load() {
         this.show = true;
@@ -1713,11 +1717,15 @@ var LazyImage = (function (lazyManager) {
         this.rect = this.$el.getBoundingClientRect();
       },
       checkInView: function checkInView() {
-        this.getRect();
-        return inBrowser && this.rect.top < window.innerHeight * lazyManager.options.preLoad && this.rect.bottom > 0 && this.rect.left < window.innerWidth * lazyManager.options.preLoad && this.rect.right > 0;
+        var _this = this;
+
+        this.el.$$getBoundingClientRect().then(function (res) {
+          _this.rect = res;
+          return inBrowser && _this.rect.top < window.innerHeight * lazyManager.options.preLoad && _this.rect.bottom > 0 && _this.rect.left < window.innerWidth * lazyManager.options.preLoad && _this.rect.right > 0;
+        });
       },
       load: function load() {
-        var _this = this;
+        var _this2 = this;
 
         var onFinish = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : noop;
 
@@ -1730,12 +1738,12 @@ var LazyImage = (function (lazyManager) {
         loadImageAsync({ src: src }, function (_ref) {
           var src = _ref.src;
 
-          _this.renderSrc = src;
-          _this.state.loaded = true;
+          _this2.renderSrc = src;
+          _this2.state.loaded = true;
         }, function (e) {
-          _this.state.attempt++;
-          _this.renderSrc = _this.options.error;
-          _this.state.error = true;
+          _this2.state.attempt++;
+          _this2.renderSrc = _this2.options.error;
+          _this2.state.error = true;
         });
       }
     }

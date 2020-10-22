@@ -49,7 +49,7 @@ Vue module for lazyloading images in your applications. Some of goals of this pr
 
 ```bash
 
-$ npm i vue-lazyload -S
+$ npm i kbone-vue-lazyload -S
 
 ```
 
@@ -74,7 +74,7 @@ main.js:
 
 import Vue from 'vue'
 import App from './App.vue'
-import VueLazyload from 'vue-lazyload'
+import VueLazyload from 'kbone-vue-lazyload'
 
 Vue.use(VueLazyload)
 
