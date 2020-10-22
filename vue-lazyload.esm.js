@@ -1,5 +1,5 @@
 /*!
- * Vue-Lazyload.js v1.3.6
+ * Vue-Lazyload.js v1.3.7
  * (c) 2020 Awe <hilongjw@gmail.com>
  * Released under the MIT License.
  */
@@ -550,7 +550,12 @@ var loadImageAsync = function loadImageAsync(item, resolve, reject) {
 };
 
 var style = function style(el, prop) {
-  return typeof getComputedStyle !== 'undefined' ? getComputedStyle(el, null).getPropertyValue(prop) : el.style[prop];
+  window.$$getComputedStyle(el, [prop]).then(function (res) {
+    return res.prop;
+  });
+  // return typeof getComputedStyle !== 'undefined'
+  //   ? getComputedStyle(el, null).getPropertyValue(prop)
+  //   : el.style[prop]
 };
 
 var overflow = function overflow(el) {
@@ -965,7 +970,7 @@ var Lazy = function (Vue) {
           observerOptions = _ref.observerOptions;
       classCallCheck(this, Lazy);
 
-      this.version = '1.3.6';
+      this.version = '1.3.7';
       this.mode = modeType.event;
       this.ListenerQueue = [];
       this.TargetIndex = 0;

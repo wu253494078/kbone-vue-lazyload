@@ -236,9 +236,12 @@ const loadImageAsync = (item, resolve, reject) => {
 }
 
 const style = (el, prop) => {
-  return typeof getComputedStyle !== 'undefined'
-    ? getComputedStyle(el, null).getPropertyValue(prop)
-    : el.style[prop]
+  window.$$getComputedStyle(el, [prop]).then(res => {
+    return res.prop
+  })
+  // return typeof getComputedStyle !== 'undefined'
+  //   ? getComputedStyle(el, null).getPropertyValue(prop)
+  //   : el.style[prop]
 }
 
 const overflow = (el) => {
