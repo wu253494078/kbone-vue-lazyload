@@ -1,5 +1,5 @@
 /*!
- * Vue-Lazyload.js v1.3.5
+ * Vue-Lazyload.js v1.3.6
  * (c) 2020 Awe <hilongjw@gmail.com>
  * Released under the MIT License.
  */
@@ -780,8 +780,8 @@ var ReactiveListener = function () {
       var _this = this;
 
       this.el.$$getBoundingClientRect().then(function (res) {
-        console.log(_this.el, _this.el.$$getBoundingClientRect(), res, '调试');
         _this.rect = res;
+        console.log(_this.rect, window.innerHeight, _this.options.preLoad, _this.options.preLoadTop, window.innerWidth, '调试');
         return _this.rect.top < window.innerHeight * _this.options.preLoad && _this.rect.bottom > _this.options.preLoadTop && _this.rect.left < window.innerWidth * _this.options.preLoad && _this.rect.right > 0;
       });
     }
@@ -965,7 +965,7 @@ var Lazy = function (Vue) {
           observerOptions = _ref.observerOptions;
       classCallCheck(this, Lazy);
 
-      this.version = '1.3.5';
+      this.version = '1.3.6';
       this.mode = modeType.event;
       this.ListenerQueue = [];
       this.TargetIndex = 0;
@@ -1524,8 +1524,8 @@ var LazyComponent = (function (lazy) {
         var _this = this;
 
         this.$el.$$getBoundingClientRect().then(function (res) {
-          console.log(_this.$el, _this.$el.$$getBoundingClientRect(), res, '调试b');
           _this.rect = res;
+          console.log(inBrowser, _this.rect, window.innerHeight, lazy.options.preLoad, window.innerWidth, '调试b');
           return inBrowser && _this.rect.top < window.innerHeight * lazy.options.preLoad && _this.rect.bottom > 0 && _this.rect.left < window.innerWidth * lazy.options.preLoad && _this.rect.right > 0;
         });
       },
@@ -1722,8 +1722,8 @@ var LazyImage = (function (lazyManager) {
         var _this = this;
 
         this.$el.$$getBoundingClientRect().then(function (res) {
-          console.log(_this.$el, _this.$el.$$getBoundingClientRect(), res, '调试a');
           _this.rect = res;
+          console.log(_this.rect, window.innerHeight, lazyManager.options.preLoad, window.innerWidth, '调试a');
           return inBrowser && _this.rect.top < window.innerHeight * lazyManager.options.preLoad && _this.rect.bottom > 0 && _this.rect.left < window.innerWidth * lazyManager.options.preLoad && _this.rect.right > 0;
         });
       },

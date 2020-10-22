@@ -35,8 +35,8 @@ export default (lazy) => {
       },
       checkInView () {
         this.$el.$$getBoundingClientRect().then(res => {
-          console.log(this.$el, this.$el.$$getBoundingClientRect(), res, '调试b')
           this.rect = res 
+          console.log(inBrowser, this.rect, window.innerHeight, lazy.options.preLoad, window.innerWidth, '调试b')
           return inBrowser &&
                     (this.rect.top < window.innerHeight * lazy.options.preLoad && this.rect.bottom > 0) &&
                     (this.rect.left < window.innerWidth * lazy.options.preLoad && this.rect.right > 0)
