@@ -231,6 +231,7 @@ const loadImageAsync = (item, resolve, reject) => {
   }
 
   image.onerror = function (e) {
+    console.log(item, image, e, '图片加载失败')
     reject(e)
   }
 }

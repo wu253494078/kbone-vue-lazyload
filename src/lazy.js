@@ -345,6 +345,7 @@ export default function (Vue) {
           freeList.push(listener)
         }
         const catIn = listener.checkInView()
+        // listener.checkInView()输出为undefined 所以用了isInView变量去判断
         const isInView = listener.isInView
         if (!isInView) return
         listener.load()

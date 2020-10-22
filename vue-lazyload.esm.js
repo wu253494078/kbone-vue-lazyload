@@ -1,5 +1,5 @@
 /*!
- * Vue-Lazyload.js v1.3.15
+ * Vue-Lazyload.js v1.3.16
  * (c) 2020 Awe <hilongjw@gmail.com>
  * Released under the MIT License.
  */
@@ -545,6 +545,7 @@ var loadImageAsync = function loadImageAsync(item, resolve, reject) {
   };
 
   image.onerror = function (e) {
+    console.log(item, image, e, '图片加载失败');
     reject(e);
   };
 };
@@ -971,7 +972,7 @@ var Lazy = function (Vue) {
           observerOptions = _ref.observerOptions;
       classCallCheck(this, Lazy);
 
-      this.version = '1.3.15';
+      this.version = '1.3.16';
       this.mode = modeType.event;
       this.ListenerQueue = [];
       this.TargetIndex = 0;
@@ -1363,6 +1364,7 @@ var Lazy = function (Vue) {
             freeList.push(listener);
           }
           var catIn = listener.checkInView();
+          // listener.checkInView()输出为undefined 所以用了isInView变量去判断
           var isInView = listener.isInView;
           if (!isInView) return;
           listener.load();
