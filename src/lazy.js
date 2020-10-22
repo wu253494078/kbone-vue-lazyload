@@ -345,7 +345,7 @@ export default function (Vue) {
           freeList.push(listener)
         }
         const catIn = listener.checkInView()
-        console.log(catIn, '调试1')
+        console.log(catIn, '调试111')
         if (!catIn) return
         listener.load()
       })

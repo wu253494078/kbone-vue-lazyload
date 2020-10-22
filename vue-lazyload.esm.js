@@ -1,5 +1,5 @@
 /*!
- * Vue-Lazyload.js v1.3.11
+ * Vue-Lazyload.js v1.3.12
  * (c) 2020 Awe <hilongjw@gmail.com>
  * Released under the MIT License.
  */
@@ -314,7 +314,7 @@ function isValidKey(key) {
 
 var assignDeep = assign;
 
-var inBrowser = typeof window !== 'undefined' && window !== null;
+var inBrowser = true;
 
 var hasIntersectionObserver = checkIntersectionObserver();
 
@@ -790,6 +790,7 @@ var ReactiveListener = function () {
 
       this.el.$$getBoundingClientRect().then(function (res) {
         _this2.rect = res;
+        console.log(_this2.rect.top < window.innerHeight * _this2.options.preLoad && _this2.rect.bottom > _this2.options.preLoadTop && _this2.rect.left < window.innerWidth * _this2.options.preLoad && _this2.rect.right > 0, 'check3');
         return _this2.rect.top < window.innerHeight * _this2.options.preLoad && _this2.rect.bottom > _this2.options.preLoadTop && _this2.rect.left < window.innerWidth * _this2.options.preLoad && _this2.rect.right > 0;
       });
     }
@@ -978,7 +979,7 @@ var Lazy = function (Vue) {
           observerOptions = _ref.observerOptions;
       classCallCheck(this, Lazy);
 
-      this.version = '1.3.11';
+      this.version = '1.3.12';
       this.mode = modeType.event;
       this.ListenerQueue = [];
       this.TargetIndex = 0;
@@ -1370,7 +1371,7 @@ var Lazy = function (Vue) {
             freeList.push(listener);
           }
           var catIn = listener.checkInView();
-          console.log(catIn, '调试1');
+          console.log(catIn, '调试111');
           if (!catIn) return;
           listener.load();
         });
@@ -1543,6 +1544,7 @@ var LazyComponent = (function (lazy) {
 
         this.$el.$$getBoundingClientRect().then(function (res) {
           _this2.rect = res;
+          console.log(inBrowser && _this2.rect.top < window.innerHeight * lazy.options.preLoad && _this2.rect.bottom > 0 && _this2.rect.left < window.innerWidth * lazy.options.preLoad && _this2.rect.right > 0, 'check2');
           return inBrowser && _this2.rect.top < window.innerHeight * lazy.options.preLoad && _this2.rect.bottom > 0 && _this2.rect.left < window.innerWidth * lazy.options.preLoad && _this2.rect.right > 0;
         });
       },
@@ -1744,6 +1746,7 @@ var LazyImage = (function (lazyManager) {
 
         this.$el.$$getBoundingClientRect().then(function (res) {
           _this2.rect = res;
+          console.log(inBrowser && _this2.rect.top < window.innerHeight * lazyManager.options.preLoad && _this2.rect.bottom > 0 && _this2.rect.left < window.innerWidth * lazyManager.options.preLoad && _this2.rect.right > 0, 'check1');
           return inBrowser && _this2.rect.top < window.innerHeight * lazyManager.options.preLoad && _this2.rect.bottom > 0 && _this2.rect.left < window.innerWidth * lazyManager.options.preLoad && _this2.rect.right > 0;
         });
       },
