@@ -70,7 +70,8 @@ export default (lazyManager) => {
         this.rect = this.$el.getBoundingClientRect()
       },
       checkInView () {
-        this.el.$$getBoundingClientRect().then(res => {
+        this.$el.$$getBoundingClientRect().then(res => {
+          console.log(this.$el, this.$el.$$getBoundingClientRect(), res, '调试a')
           this.rect = res 
           return inBrowser &&
                     (this.rect.top < window.innerHeight * lazyManager.options.preLoad && this.rect.bottom > 0) &&

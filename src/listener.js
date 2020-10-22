@@ -102,7 +102,8 @@ export default class ReactiveListener {
    */
   checkInView () {
     this.el.$$getBoundingClientRect().then(res => {
-      this.rect = res 
+      console.log(this.el, this.el.$$getBoundingClientRect(), res, '调试')
+      this.rect = res
       return (this.rect.top < window.innerHeight * this.options.preLoad && this.rect.bottom > this.options.preLoadTop) &&
             (this.rect.left < window.innerWidth * this.options.preLoad && this.rect.right > 0)
     })

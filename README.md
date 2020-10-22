@@ -1,4 +1,4 @@
-# Vue-Lazyload
+# Kbone-Vue-Lazyload (对vue-lazyload进行了修改，适用于kbone一键生成小程序，用法和vue-lazyload一样)
 
 [![Build Status](https://img.shields.io/circleci/project/hilongjw/vue-lazyload/master.svg?style=flat-square)](https://circleci.com/gh/hilongjw/vue-lazyload)
 [![npm version](https://img.shields.io/npm/v/vue-lazyload.svg?style=flat-square)](http://badge.fury.io/js/vue-lazyload)
