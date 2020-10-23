@@ -1,5 +1,5 @@
 /*!
- * Vue-Lazyload.js v1.3.16
+ * Vue-Lazyload.js v1.3.17
  * (c) 2020 Awe <hilongjw@gmail.com>
  * Released under the MIT License.
  */
@@ -525,7 +525,8 @@ var _ = {
 };
 
 var loadImageAsync = function loadImageAsync(item, resolve, reject) {
-  var image = new Image();
+  // let image = new Image()
+  var image = document.createElement('img');
   if (!item || !item.src) {
     var err = new Error('image src is required');
     return reject(err);
@@ -972,7 +973,7 @@ var Lazy = function (Vue) {
           observerOptions = _ref.observerOptions;
       classCallCheck(this, Lazy);
 
-      this.version = '1.3.16';
+      this.version = '1.3.17';
       this.mode = modeType.event;
       this.ListenerQueue = [];
       this.TargetIndex = 0;

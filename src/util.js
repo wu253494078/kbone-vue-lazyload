@@ -211,7 +211,8 @@ const _ = {
 }
 
 const loadImageAsync = (item, resolve, reject) => {
-  let image = new Image()
+  // let image = new Image()
+  let image = document.createElement('img')
   if (!item || !item.src) {
     const err = new Error('image src is required')
     return reject(err)
